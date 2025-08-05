@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-service
+  namespace: microservices-platform
+  labels:
+    app: products-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: products-service
+  template:
+    metadata:
+      labels:
+        app: products-service
+    spec:
+      containers:
+      - name: products-service
+        image: enterprise-microservices:latest
+        command: ["node"]
+        args: ["services/products-service/index.js"]
+        ports:
+        - containerPort: 3002
+        env:
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: microservices-config
+              key: NODE_ENV
+        - name: PRODUCTS_SERVICE_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: microservices-config
+              key: PRODUCTS_SERVICE_PORT
+        - name: EXTERNAL_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: microservices-config
+              key: EXTERNAL_API_URL
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: microservices-secrets
+              key: JWT_SECRET
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3002
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-service
+  namespace: microservices-platform
+spec:
+  selector:
+    app: products-service
+  ports:
+  - protocol: TCP
+    port: 3002
+    targetPort: 3002
+  type: ClusterIP 
