@@ -9,8 +9,8 @@ const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Function to perform login
@@ -19,7 +19,7 @@ async function login(email, password) {
     console.log('🔐 Performing login...');
     const response = await apiClient.post('/auth/login', {
       email,
-      password
+      password,
     });
     
     authToken = response.data.token;
@@ -58,8 +58,8 @@ async function verifyToken() {
 
   try {
     console.log('🔍 Verificando token...');
-    const response = await apiClient.get('/auth/verify', {
-      headers: { Authorization: `Bearer ${authToken}` }
+    await apiClient.get('/auth/verify', {
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log('✅ Token válido!');
@@ -80,7 +80,7 @@ async function getProfile() {
   try {
     console.log('👤 Obtendo perfil do usuário...');
     const response = await apiClient.get('/auth/profile', {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log('✅ Perfil obtido com sucesso!');
@@ -105,7 +105,7 @@ async function getProducts(limit = 10, sort = 'desc') {
   try {
     console.log('🛍️  Buscando produtos...');
     const response = await apiClient.get(`/products?limit=${limit}&sort=${sort}`, {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log(`✅ ${response.data.total} produtos encontrados!`);
@@ -128,7 +128,7 @@ async function getProductById(id) {
   try {
     console.log(`🔍 Buscando produto ID: ${id}...`);
     const response = await apiClient.get(`/products/${id}`, {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log('✅ Produto encontrado!');
@@ -154,7 +154,7 @@ async function getCategories() {
   try {
     console.log('📂 Buscando categorias...');
     const response = await apiClient.get('/categories', {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log(`✅ ${response.data.total} categorias encontradas!`);
@@ -177,7 +177,7 @@ async function getProductsByCategory(category, limit = 10) {
   try {
     console.log(`🛍️  Buscando produtos da categoria: ${category}...`);
     const response = await apiClient.get(`/products/category/${category}?limit=${limit}`, {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log(`✅ ${response.data.total} produtos encontrados na categoria ${category}!`);
@@ -200,7 +200,7 @@ async function clearCache() {
   try {
     console.log('🧹 Limpando cache...');
     const response = await apiClient.delete('/admin/cache', {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log('✅ Cache limpo com sucesso!');
@@ -223,7 +223,7 @@ async function getCacheStats() {
   try {
     console.log('📊 Obtendo estatísticas do cache...');
     const response = await apiClient.get('/admin/cache/stats', {
-      headers: { Authorization: `Bearer ${authToken}` }
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     
     console.log('✅ Estatísticas obtidas!');
@@ -351,7 +351,7 @@ module.exports = {
   getCacheStats,
   checkHealth,
   getApiDocs,
-  runExample
+  runExample,
 };
 
 // Executar exemplo se o arquivo for executado diretamente

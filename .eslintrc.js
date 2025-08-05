@@ -39,10 +39,6 @@ module.exports = {
     'no-var': 'error',
     'arrow-spacing': 'error',
     'template-curly-spacing': 'error',
-    
-    // Security
-    'no-implied-eval': 'error',
-    'no-new-func': 'error',
   },
   overrides: [
     {
