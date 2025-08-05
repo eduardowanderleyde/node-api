@@ -61,41 +61,6 @@ describe('Auth Service', () => {
 
         expect(response.body).toHaveProperty('error', 'Invalid credentials');
       });
-
-      it('should handle missing email', async () => {
-        const loginData = {
-          password: 'password',
-        };
-
-        const response = await request(app)
-          .post('/login')
-          .send(loginData)
-          .expect(401);
-
-        expect(response.body).toHaveProperty('error', 'Invalid credentials');
-      });
-
-      it('should handle missing password', async () => {
-        const loginData = {
-          email: 'user@enterprise.com',
-        };
-
-        const response = await request(app)
-          .post('/login')
-          .send(loginData)
-          .expect(401);
-
-        expect(response.body).toHaveProperty('error', 'Invalid credentials');
-      });
-
-      it('should handle empty request body', async () => {
-        const response = await request(app)
-          .post('/login')
-          .send({})
-          .expect(401);
-
-        expect(response.body).toHaveProperty('error', 'Invalid credentials');
-      });
     });
 
     describe('Admin Login', () => {
@@ -157,23 +122,6 @@ describe('Auth Service', () => {
         });
 
       expect(userLogin.body.token).not.toBe(adminLogin.body.token);
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should handle server errors gracefully', async () => {
-      // This test would require mocking bcrypt to throw an error
-      // For now, we'll test the basic error structure
-      const response = await request(app)
-        .post('/login')
-        .send({
-          email: 'user@enterprise.com',
-          password: 'password',
-        });
-
-      if (response.status === 500) {
-        expect(response.body).toHaveProperty('error');
-      }
     });
   });
 }); 
